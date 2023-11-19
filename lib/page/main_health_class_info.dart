@@ -4,6 +4,8 @@ import 'package:health_care_ml_app/model/health_class_info.dart';
 import 'package:health_care_ml_app/page/main_health_club_page.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../base_app_color_and_font/constant_widget.dart';
+
 
 class DisableClassPage extends StatefulWidget {
   const DisableClassPage({super.key});
@@ -24,9 +26,9 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
 
   // void addList() async {
   //   final List<Place> places = await getPlaceList();
-  //   print(placeList.length);
+  //   print(disableClassroom.length);
   //   setState(() {
-  //     placeList.addAll(places);
+  //     disableClassroom.addAll(places);
   //   });
   // }
   late TabController _tabController;
@@ -42,14 +44,18 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tab View Example'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: '생활 체육 동호회 정보'),
-            Tab(text: '생활체육교실 정보'),
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50.0),
+        child: AppBar(
+          
+          title: Text(''),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: '생활 체육 동호회 정보'),
+              Tab(text: '생활체육교실 정보'),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -76,14 +82,19 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
         Expanded(
           child: ListView.separated(
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Text(
-                      disableClassroom[index].recruitment_date.toString(),
-                    ),Text(
-                      disableClassroom[index].class_nm.toString(),
+                return SizedBox(
+                  child: PhysicalModel(
+                    color: Colors.white,
+                    elevation: 3,
+                    shadowColor: Colors.blue.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(normalHeight),
+                    child: ListTile(
+                      hoverColor: Colors.grey[200],
+                      contentPadding: EdgeInsets.only(left: 20),
+                      title: disableClassroom[index].class_nm?.text.fontWeight(FontWeight.bold).size(normalFontSize - 1).make(),
+                      subtitle: Text("${disableClassroom[index].class_location} " + disableClassroom[index].signgu_nm.toString(),style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
                     ),
-                  ],
+                  ),
                 );
               },
               separatorBuilder: (ctx, idx) {

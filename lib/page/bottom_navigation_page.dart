@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_care_ml_app/page/select_health_care_page.dart';
 import 'main_health_class_info.dart';
 import 'main_health_club_page.dart';
 
@@ -17,7 +18,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _currentIndex = 0; // 바텀 네비게이션 현재 index
   List<Widget> appPages = [
     DisableClassPage(),
-    MainClubInfoPage(),
+    SelectHealthCarePage(),
    // LocationPage(),
 
   ]; // 앱 화면들
