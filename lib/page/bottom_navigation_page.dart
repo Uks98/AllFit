@@ -42,12 +42,12 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: '홈',
+            icon: Icon(Icons.add_circle_outline),
+            label: '맞춤 정보',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: '즐겨찾기',
+            icon: Icon(Icons.accessibility_outlined),
+            label: '운동 추천',
           ),
         ],
       ),

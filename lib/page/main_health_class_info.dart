@@ -5,6 +5,7 @@ import 'package:health_care_ml_app/page/main_health_club_page.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../base_app_color_and_font/constant_widget.dart';
+import '../color/color_box.dart';
 
 
 class DisableClassPage extends StatefulWidget {
@@ -45,11 +46,13 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
+        preferredSize: Size.fromHeight(80.0),
         child: AppBar(
-          
-          title: Text(''),
+          centerTitle: true,
+          backgroundColor: ColorBox.appbarColor,
           bottom: TabBar(
+            labelColor: Colors.grey,
+
             controller: _tabController,
             tabs: const [
               Tab(text: '생활 체육 동호회 정보'),
@@ -57,12 +60,6 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-          await getDisableClass();
-        },
-        child: Text("add"),
       ),
     body:TabBarView(
       controller: _tabController,
@@ -77,34 +74,37 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
   }
 
   Widget mainClassInfo() {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  child: PhysicalModel(
-                    color: Colors.white,
-                    elevation: 3,
-                    shadowColor: Colors.blue.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(normalHeight),
-                    child: ListTile(
-                      hoverColor: Colors.grey[200],
-                      contentPadding: EdgeInsets.only(left: 20),
-                      title: disableClassroom[index].class_nm?.text.fontWeight(FontWeight.bold).size(normalFontSize - 1).make(),
-                      subtitle: Text("${disableClassroom[index].class_location} " + disableClassroom[index].signgu_nm.toString(),style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0,right: 10),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    child: PhysicalModel(
+                      color: Colors.white,
+                      elevation: 3,
+                      shadowColor: Colors.blue.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(normalHeight),
+                      child: ListTile(
+                        hoverColor: Colors.grey[200],
+                        contentPadding: EdgeInsets.only(left: 20),
+                        title: disableClassroom[index].class_nm?.text.fontWeight(FontWeight.w500).size(normalFontSize - 1).make(),
+                        subtitle: Text("${disableClassroom[index].class_location} " + disableClassroom[index].signgu_nm.toString(),style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
+                      ),
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (ctx, idx) {
-                return SizedBox(
-                  height: 10,
-                );
-              },
-              itemCount: disableClassroom.length),
-        ),
-      ],
+                  );
+                },
+                separatorBuilder: (ctx, idx) {
+                  return SizedBox(
+                    height: 10,
+                  );
+                },
+                itemCount: disableClassroom.length),
+          ),
+        ],
+      ),
     );
   }
 }

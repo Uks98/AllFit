@@ -38,28 +38,28 @@ class ClubDetailPage extends StatelessWidget {
                 SizedBox(height: smallHeight,),
                 Row(
                   children: [
-                        "운동 형태         ".text.size(normalFontSize).fontWeight(FontWeight.bold).make(),
+                        "운동 형태         ".text.size(normalFontSize).make(),
                           disableClubInfo.class_type!.text.size(normalFontSize).make()
                   ],
                 ),
                 SizedBox(height: normalHeight,),
                 Row(
                   children: [
-                    "장애 유형         ".text.size(normalFontSize).fontWeight(FontWeight.bold).make(),
+                    "장애 유형         ".text.size(normalFontSize).make(),
                     disableClubInfo.disable_type!.text.size(normalFontSize).make()
                   ],
                 ),
                 SizedBox(height: normalHeight,),
                 Row(
                   children: [
-                    "운동 형태         ".text.size(normalFontSize).fontWeight(FontWeight.bold).make(),
+                    "운동 형태         ".text.size(normalFontSize).make(),
                     disableClubInfo.operate_time!.text.size(normalFontSize).make()
                   ],
                 ),
                 SizedBox(height: normalHeight,),
-                "동호회 소개".text.size(normalFontSize).fontWeight(FontWeight.bold).make(),
+                "동호회 소개".text.size(normalFontSize).make(),
                 SizedBox(height: normalHeight,),
-                disableClubInfo.detail_info != ""? Container(child: disableClubInfo.detail_info!.text.size(normalFontSize).make()): "아직 소개가 없어요".text.make()
+                disableClubInfo.detail_info != ""? Container(child: disableClubInfo.detail_info!.text.color(Colors.grey[600]).size(smallFontSize + 3).make()): "아직 소개가 없어요".text.make()
               ],
             ),
           ),
