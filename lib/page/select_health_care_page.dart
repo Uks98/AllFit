@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:health_care_ml_app/color/color_box.dart';
 import 'package:health_care_ml_app/model/health_recommend_data.dart';
 import 'package:health_care_ml_app/page/recommend_sport_page.dart';
@@ -25,14 +26,13 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
   List<String> sportStep = ["준비운동", "본운동", "마무리운동"];
 
   int ageIndex = 0;
-  String ageText = "";
   int disableTypeIndex = 0;
-  String disableTypeText = "";
   int disableGradIndex = 0;
-  String disableGradText = "";
   int sportStepIndex = 0;
+  String ageText = "";
+  String disableTypeText = "";
+  String disableGradText = "";
   String sportStepText = "";
-
   Future<void> getSportList() async {
     final routeFromJsonFile = await rootBundle.loadString(
         'lib/json/KS_DSPSN_FTNESS_MESURE_ACCTO_RECOMEND_MVM_INFO_202304.json');
@@ -45,13 +45,14 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
     filteredSportList = sportList
         .where((sport) =>
             sport.age!.contains(age) &&
-            sport.disalbe_type!.contains(type) &&
+            sport.disalbe_type!.contains(type)&&
             sport.disable_grad!.contains(grad) &&
-            sport.sport_step!.contains(step))
+            sport.sport_step!.contains(step)
+    )
         .toList();
     print(filteredSportList);
     for (final x in filteredSportList) {
-      print("추천 운동        ${x.disable_grad}");
+      print("추천 운동        ${x.age}");
     }
   }
 
@@ -100,34 +101,45 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
               SizedBox(
                 width: 400,
                 height: 40,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            ageIndex = index;
-                            ageText = ageList[index];
-                          });
-                        },
-                        child: Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: ageIndex == index
-                                ? ColorBox.ageSelectColor
-                                : ColorBox.unSelectColor,
-                            borderRadius: BorderRadius.circular(14),
+                child: AnimationLimiter(
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 300),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: SlideAnimation(
+                              child:  GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    ageIndex = index;
+                                    ageText = ageList[index];
+                                  });
+                                },
+                                child: Container(
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: ageIndex == index
+                                        ? ColorBox.ageSelectColor
+                                        : ColorBox.unSelectColor,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Center(child: ageList[index].text.size(smallFontSize).make()),
+                                ),
+                              )
+                            ),
                           ),
-                          child: Center(child: ageList[index].text.size(smallFontSize).make()),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: ageList.length),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          width: 5,
+                        );
+                      },
+                      itemCount: ageList.length),
+                ),
               ),
               SizedBox(
                 height: normalHeight,
@@ -143,34 +155,45 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
               SizedBox(
                 width: 400,
                 height: 40,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            disableTypeIndex = index;
-                            disableTypeText = disableType[index];
-                          });
-                        },
-                        child: Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: disableTypeIndex == index
-                                ? ColorBox.typeSelectColor
-                                : ColorBox.unSelectColor,
-                            borderRadius: BorderRadius.circular(14),
+                child: AnimationLimiter(
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 500),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: SlideAnimation(
+                                child:  GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      disableTypeIndex = index;
+                                      disableTypeText = disableType[index];
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      color: disableTypeIndex == index
+                                          ? ColorBox.typeSelectColor
+                                          : ColorBox.unSelectColor,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Center(child: disableType[index].text.size(smallFontSize).make()),
+                                  ),
+                                )
+                            ),
                           ),
-                          child: Center(child: disableType[index].text.size(smallFontSize).make()),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: disableType.length),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          width: 5,
+                        );
+                      },
+                      itemCount: disableType.length),
+                ),
               ),
               SizedBox(
                 height: normalHeight,
@@ -186,34 +209,45 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
               SizedBox(
                 width: 400,
                 height: 40,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            disableGradIndex = index;
-                            disableGradText = disableGrad[index];
-                          });
-                        },
-                        child: Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: disableGradIndex == index
-                                ? ColorBox.gradSelectColor
-                                : ColorBox.unSelectColor,
-                            borderRadius: BorderRadius.circular(14),
+                child: AnimationLimiter(
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 800),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: SlideAnimation(
+                                child:  GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      disableGradIndex = index;
+                                      disableGradText = disableGrad[index];
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      color: disableGradIndex == index
+                                          ? ColorBox.gradSelectColor
+                                          : ColorBox.unSelectColor,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Center(child: disableGrad[index].text.size(smallFontSize).make()),
+                                  ),
+                                )
+                            ),
                           ),
-                          child: Center(child: disableGrad[index].text.size(smallFontSize).make()),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: disableGrad.length),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          width: 5,
+                        );
+                      },
+                      itemCount: disableGrad.length),
+                ),
               ),
               SizedBox(
                 height: normalHeight,
@@ -229,34 +263,45 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
               SizedBox(
                 width: 400,
                 height: 40,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            sportStepIndex = index;
-                            sportStepText = sportStep[index];
-                          });
-                        },
-                        child: Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: sportStepIndex == index
-                                ? ColorBox.stepSelectColor
-                                : ColorBox.unSelectColor,
-                            borderRadius: BorderRadius.circular(14),
+                child: AnimationLimiter(
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 1000),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: SlideAnimation(
+                                child:  GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      sportStepIndex = index;
+                                      sportStepText = sportStep[index];
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      color: sportStepIndex == index
+                                          ? ColorBox.stepSelectColor
+                                          : ColorBox.unSelectColor,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Center(child: sportStep[index].text.size(smallFontSize).make()),
+                                  ),
+                                )
+                            ),
                           ),
-                          child: Center(child: sportStep[index].text.size(smallFontSize).make()),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemCount: sportStep.length),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          width: 5,
+                        );
+                      },
+                      itemCount: sportStep.length),
+                ),
               ),
               const SizedBox(
                 height: 50,

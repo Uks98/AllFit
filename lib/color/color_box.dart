@@ -11,6 +11,10 @@ class ColorBox{
   static const Color stepSelectColor = Color(0xff9FBB73);
   static const Color unSelectColor = Color(0xffF3EEEA);
   static const Color selectButtonColor = Color(0xffFFFBF5);
+  static const Color indicatorColor = Color(0xffBCA37F);
+  static const Color locationButtonColor = Color(0xffEAD7BB);
+  static const Color sportButtonColor = Color(0xffEAD7BB);
+
 
 
   static const Color appbarColor = Color(0xffF5F7F8);

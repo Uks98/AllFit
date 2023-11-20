@@ -33,6 +33,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black, // 선택된 아이템의 라벨 색상
+        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 라벨 색상
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -40,9 +42,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             print(_currentIndex);
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
+            icon: Icon(Icons.add_circle_outline,color: Colors.black,),
             label: '맞춤 정보',
           ),
           BottomNavigationBarItem(

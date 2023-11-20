@@ -38,6 +38,7 @@ dependencies:
   #get x 상태관리
   get:
   velocity_x:
+  flutter_staggered_animations: ^1.1.1
 
 dev_dependencies:
   flutter_test:
