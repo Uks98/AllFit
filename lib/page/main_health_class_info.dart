@@ -51,6 +51,7 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
     // TODO: implement initState
     super.initState();
     getDisableClass();
+    sportFilterList =  disableClassroom;
   }
 
   @override

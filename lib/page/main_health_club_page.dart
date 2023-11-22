@@ -52,6 +52,7 @@ class _MainClubInfoPageState extends State<MainClubInfoPage> {
     // TODO: implement initState
     super.initState();
     getPlaceList();
+    filteredPlaceList = placeList;
   }
 
   @override

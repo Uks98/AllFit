@@ -39,6 +39,11 @@ dependencies:
   get:
   velocity_x:
   flutter_staggered_animations: ^1.1.1
+  image_picker: ^1.0.2
+  camera: ^0.10.5+3
+  path: ^1.8.3
+  path_provider: ^2.1.0
+  google_mlkit_pose_detection:
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +70,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     #- images/a_dot_burr.jpeg
+     - asset/
      #- images/a_dot_ham.jpeg
      - lib/json/
 

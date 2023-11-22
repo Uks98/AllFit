@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:health_care_ml_app/page/detail_sport_page.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../base_app_color_and_font/constant_widget.dart';
 import '../model/health_recommend_data.dart';
@@ -12,7 +13,6 @@ class RecommendSportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(sportList);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 10.0,right: 10),
@@ -40,12 +40,7 @@ class RecommendSportPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(normalHeight),
                                   child: ListTile(
                                     onTap: (){
-                                      // showModalBottomSheet(
-                                      //   context: context,
-                                      //   builder: (BuildContext context) {
-                                      //     return ClubDetailPage(disableClubInfo: sportList[index],); // 위에서 만든 CustomBottomSheet 위젯을 호출합니다.
-                                      //   },
-                                      // );
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DetailSportPage(recommendSport: sportList[index],)));
                                     },
                                     hoverColor: Colors.grey[200],
                                     contentPadding: EdgeInsets.only(left: 20),
