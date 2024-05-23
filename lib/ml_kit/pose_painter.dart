@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:get/get.dart';
 import 'package:health_care_ml_app/ml_kit/translate_util.dart';
-import 'package:path/path.dart';
+
+import '../controller/ml_text_controller.dart';
 
 
 class PosePainter extends CustomPainter {
@@ -25,7 +26,7 @@ class PosePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final count_ct = Get.put(GetCounter());
+    final countCt = Get.put(GetCounter());
 
     final paint = Paint()
       ..style = PaintingStyle.stroke
@@ -51,7 +52,7 @@ class PosePainter extends CustomPainter {
       pose.landmarks.forEach((key, value) {});
       paintLine(PoseLandmarkType type1,PoseLandmarkType type2,Paint paintType){
         final PoseLandmark joint1 = pose.landmarks[type1]!; //land marks는 map형태라 키값접근
-        final PoseLandmark  joint2 = pose.landmarks[type2]!; //land marks는 map형태라 키값접근
+        final PoseLandmark  joint2 = pose.landmarks[type2]!;
         canvas.drawLine(
             Offset(
             translateX(joint1.x, size, imageSize, rotation, cameraLensDirection),
@@ -138,12 +139,13 @@ class PosePainter extends CustomPainter {
 
 
       hipTextBuilder.pushStyle(ui.TextStyle(color: Colors.white,background: background));
-      hipTextBuilder.addText('${angleHip.toStringAsFixed(1)}');
+      hipTextBuilder.addText(angleHip.toStringAsFixed(1));
       hipTextBuilder.pop();
-      print(angleHip);
-      count_ct.upCount(angleKnee, angleHip);
+      //올바른 무릎 각도 + 엉덩이 각도에 의한 횟수 카운터
+      countCt.upCount(angleKnee, angleHip);
+
       countTextSet.pushStyle(ui.TextStyle(color: Colors.white,background: countFont));
-      countTextSet.addText('${count_ct.count.value}');
+      countTextSet.addText('${countCt.count.value}');
       countTextSet.pop();
 
     final rkJoint = pose.landmarks[PoseLandmarkType.rightKnee]!;
@@ -160,7 +162,6 @@ class PosePainter extends CustomPainter {
         translateX(rhJoint.x, size, imageSize, rotation, cameraLensDirection),
         translateY(rhJoint.y, size, imageSize, rotation, cameraLensDirection),);
       //텍스트 표시
-
       canvas.drawParagraph(hipTextBuilder.build()..layout(const ParagraphConstraints(width: 100)), textOffset);
 
 
@@ -194,13 +195,3 @@ class PosePainter extends CustomPainter {
   }
 }
 
-class GetCounter extends GetxController{
-  RxInt count = 0.obs;
-  void upCount(double a, double b){
-      if ((a > 63.7) && (b > 68.8)){
-        count++;
-      }else{
-      }
-  }
-
-}

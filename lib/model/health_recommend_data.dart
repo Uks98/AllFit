@@ -3,18 +3,18 @@ import 'dart:convert';
 class RecommendSport {
   String? age;
   String? sex;
-  String? disalbe_type;
-  String? disable_grad;
-  String? sport_step;
-  String? recommend_sport;
+  String? disableType;
+  String? disableGrad;
+  String? sportStep;
+  String? recommendSport;
 
   RecommendSport(
       { this.age,
         this.sex,
-        this.disalbe_type,
-        this.disable_grad,
-        this.sport_step,
-        this.recommend_sport,
+        this.disableType,
+        this.disableGrad,
+        this.sportStep,
+        this.recommendSport,
       });
 
   //marker에 필요한 factory method
@@ -22,14 +22,13 @@ class RecommendSport {
     return RecommendSport(
         age: json["agrde_flag_nm"].toString(),
         sex: json["sexdstn_flag_cd"].toString(),
-        disalbe_type: json["trobl_ty_nm"].toString(),
-        disable_grad: json["trobl_grad_nm"].toString(),
-        sport_step: json["sports_step_nm"].toString(),
-        recommend_sport: json["recomend_mvm_nm"].toString());
+        disableType: json["trobl_ty_nm"].toString(),
+        disableGrad: json["trobl_grad_nm"].toString(),
+        sportStep: json["sports_step_nm"].toString(),
+        recommendSport: json["recomend_mvm_nm"].toString());
   }
 }
 
-//로케이션 페이지 데이터 인터페이스 (마커)
 
 class DisableSportClass {
   final List<RecommendSport>? sportList;

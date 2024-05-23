@@ -51,6 +51,7 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
     }
   }
   late TabController _tabController;
+
   @override
   void initState() {
     super.initState();

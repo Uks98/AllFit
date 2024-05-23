@@ -42,20 +42,53 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
     setState(() {});
   }
 
-  void recommendSport(String age, String type, String grad, String step) {
+  void recommendSport(String? age, String? type, String? grad, String? step) {
+    if (age == null || type == null || grad == null || step == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: "죄송합니다. 에러가 발생했습니다. 다시 시도해주세요".text.make(),
+        ),
+      );
+    }
     filteredSportList = sportList
         .where((sport) =>
-            sport.age!.contains(age) &&
-            sport.disalbe_type!.contains(type)&&
-            sport.disable_grad!.contains(grad) &&
-            sport.sport_step!.contains(step)
-    ).toList();
+            sport.age!.contains(age!) &&
+            sport.disableType!.contains(type!) &&
+            sport.disableGrad!.contains(grad!) &&
+            sport.sportStep!.contains(step!))
+        .toList();
+  }
 
+  void getRecommendTypeForDisable(
+    String ageText,
+    String disableTypeText,
+    String disableGradText,
+    String sportStepText,
+  ) {
+    recommendSport(
+      ageText,
+      disableTypeText,
+      disableGradText,
+      sportStepText,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("나에게 알맞은 운동을 찾고있어요 잠시만요!"),
+      ),
+    );
+    Future.delayed(const Duration(seconds: 3)).then(
+      (value) => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => RecommendSportPage(
+            sportList: filteredSportList,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSportList();
   }
@@ -75,26 +108,20 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                   .fontWeight(FontWeight.w500)
                   .size(normalFontSize + 7)
                   .make(),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalHeight),
               "내 몸에 맞는 운동을 찾아드릴게요!"
                   .text
                   .color(Colors.grey[600])
                   .fontWeight(FontWeight.w500)
                   .size(smallFontSize + 5)
                   .make(),
-              SizedBox(
-                height: 40,
-              ),
+              HeightBox(bigHeight + 20),
               "연령대"
                   .text
                   .size(normalFontSize)
                   .fontWeight(FontWeight.w500)
                   .make(),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalHeight),
               SizedBox(
                 width: 400,
                 height: 40,
@@ -108,47 +135,44 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: SlideAnimation(
-                              child:  GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    ageIndex = index;
-                                    ageText = ageList[index];
-                                  });
-                                },
-                                child: Container(
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    color: ageIndex == index
-                                        ? ColorBox.ageSelectColor
-                                        : ColorBox.unSelectColor,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: Center(child: ageList[index].text.size(smallFontSize).make()),
+                                child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  ageIndex = index;
+                                  ageText = ageList[index];
+                                });
+                              },
+                              child: Container(
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: ageIndex == index
+                                      ? ColorBox.ageSelectColor
+                                      : ColorBox.unSelectColor,
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                              )
-                            ),
+                                child: Center(
+                                    child: ageList[index]
+                                        .text
+                                        .size(smallFontSize)
+                                        .make()),
+                              ),
+                            )),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(
-                          width: 5,
-                        );
+                        return WidthBox(smallWidth);
                       },
                       itemCount: ageList.length),
                 ),
               ),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalHeight),
               "장애유형"
                   .text
                   .size(normalFontSize)
                   .fontWeight(FontWeight.w500)
                   .make(),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalHeight),
               SizedBox(
                 width: 400,
                 height: 40,
@@ -162,39 +186,38 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: SlideAnimation(
-                                child:  GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      disableTypeIndex = index;
-                                      disableTypeText = disableType[index];
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      color: disableTypeIndex == index
-                                          ? ColorBox.typeSelectColor
-                                          : ColorBox.unSelectColor,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Center(child: disableType[index].text.size(smallFontSize).make()),
-                                  ),
-                                )
-                            ),
+                                child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  disableTypeIndex = index;
+                                  disableTypeText = disableType[index];
+                                });
+                              },
+                              child: Container(
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: disableTypeIndex == index
+                                      ? ColorBox.typeSelectColor
+                                      : ColorBox.unSelectColor,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Center(
+                                    child: disableType[index]
+                                        .text
+                                        .size(smallFontSize)
+                                        .make()),
+                              ),
+                            )),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(
-                          width: 5,
-                        );
+                        return WidthBox(smallWidth);
                       },
                       itemCount: disableType.length),
                 ),
               ),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalHeight),
               "장애등급"
                   .text
                   .size(normalFontSize)
@@ -216,32 +239,33 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: SlideAnimation(
-                                child:  GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      disableGradIndex = index;
-                                      disableGradText = disableGrad[index];
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      color: disableGradIndex == index
-                                          ? ColorBox.gradSelectColor
-                                          : ColorBox.unSelectColor,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Center(child: disableGrad[index].text.size(smallFontSize).make()),
-                                  ),
-                                )
-                            ),
+                                child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  disableGradIndex = index;
+                                  disableGradText = disableGrad[index];
+                                });
+                              },
+                              child: Container(
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: disableGradIndex == index
+                                      ? ColorBox.gradSelectColor
+                                      : ColorBox.unSelectColor,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Center(
+                                    child: disableGrad[index]
+                                        .text
+                                        .size(smallFontSize)
+                                        .make()),
+                              ),
+                            )),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(
-                          width: 5,
-                        );
+                        return WidthBox(smallWidth);
                       },
                       itemCount: disableGrad.length),
                 ),
@@ -254,9 +278,7 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                   .size(normalFontSize)
                   .fontWeight(FontWeight.w500)
                   .make(),
-              SizedBox(
-                height: normalHeight,
-              ),
+              HeightBox(normalWidth),
               SizedBox(
                 width: 400,
                 height: 40,
@@ -270,71 +292,59 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: SlideAnimation(
-                                child:  GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      sportStepIndex = index;
-                                      sportStepText = sportStep[index];
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      color: sportStepIndex == index
-                                          ? ColorBox.stepSelectColor
-                                          : ColorBox.unSelectColor,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Center(child: sportStep[index].text.size(smallFontSize).make()),
-                                  ),
-                                )
-                            ),
+                                child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  sportStepIndex = index;
+                                  sportStepText = sportStep[index];
+                                });
+                              },
+                              child: Container(
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: sportStepIndex == index
+                                      ? ColorBox.stepSelectColor
+                                      : ColorBox.unSelectColor,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Center(
+                                    child: sportStep[index]
+                                        .text
+                                        .size(smallFontSize)
+                                        .make()),
+                              ),
+                            ),),
                           ),
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(
-                          width: 5,
-                        );
+                        return WidthBox(smallWidth);
                       },
                       itemCount: sportStep.length),
                 ),
               ),
-              const SizedBox(
-                height: 50,
+              HeightBox(
+                bigHeight + 30,
               ),
               Row(
                 children: [
                   Expanded(
-                      child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle( backgroundColor: MaterialStateProperty.all(ColorBox.selectButtonColor)),
-                        onPressed: () {
-                          recommendSport(
-                            ageText,
-                            disableTypeText,
-                            disableGradText,
-                            sportStepText,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("나에게 알맞은 운동을 찾고있어요 잠시만요!"),),);
-                          Future.delayed(Duration(seconds: 3)).then(
-                            (value) => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RecommendSportPage(
-                                  sportList: filteredSportList,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                    child: SizedBox(
+                      height: bigHeight + 30,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(ColorBox.selectButtonColor),
+                        ),
+                        onPressed: () => getRecommendTypeForDisable(ageText, disableTypeText, disableGradText, sportStepText),
                         child: "나에게 꼭 맞는 운동 추천 받기"
                             .text
                             .fontWeight(FontWeight.w500)
-                            .make()),
-                  ))
+                            .make(),
+                      ),
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

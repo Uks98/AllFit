@@ -10,8 +10,8 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:health_care_ml_app/ml_kit/pose_painter.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../controller/ml_text_controller.dart';
 import 'camera_view_page.dart';
-import 'dummy.dart';
 
 class FaceDetectorApp extends StatefulWidget {
   const FaceDetectorApp({super.key});
@@ -24,10 +24,9 @@ class _FaceDetectorAppState extends State<FaceDetectorApp> {
   File? _image;
   ImagePicker imagePicker = ImagePicker();
   String? resultText;
-  final count_ct = Get.put(GetCounter());
-  final PoseDetector poseDetector = PoseDetector(
-      options: PoseDetectorOptions(
-          mode: PoseDetectionMode.stream, model: PoseDetectionModel.base));
+  final countCT = Get.put(GetCounter());
+
+  final PoseDetector poseDetector = PoseDetector(options: PoseDetectorOptions(mode: PoseDetectionMode.stream, model: PoseDetectionModel.base));
 
   CustomPaint? customPaint;
 
@@ -42,12 +41,6 @@ class _FaceDetectorAppState extends State<FaceDetectorApp> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("AI 운동 가이드"),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
       ),
       body: CameraView(
         customPaint: customPaint,

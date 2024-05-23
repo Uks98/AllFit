@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:health_care_ml_app/base_app_color_and_font/constant_widget.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../controller/sport_text_control_contoller.dart';
@@ -32,18 +33,11 @@ class _SelectedListState extends State<SelectedList> {
                   _textController.selectedText.value = widget.list[index];
                 });
               },
-              child: Container(
-                width: 80,
-                decoration: BoxDecoration(
-                  color: widget.selectIndex == index ? Colors.amber : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Center(child: widget.list[index].text.make()),
-              ),
+              child: VxBox(child: Center(child: widget.list[index].text.make(),)
+              ).width(80).color(widget.selectIndex == index ? Colors.amber : Colors.grey,).withRounded(value: 15).make(),
             );
-
           }, separatorBuilder: (context,index){
-        return SizedBox(width: 5,);
+        return WidthBox(smallWidth);
       }, itemCount: widget.list.length),
     );
   }
