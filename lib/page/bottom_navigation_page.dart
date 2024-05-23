@@ -7,7 +7,7 @@ import 'main_health_class_info.dart';
 import 'main_health_club_page.dart';
 
 class  BottomNavigationPage extends StatefulWidget {
-  BottomNavigationPage({Key? key}) : super(key: key);
+  const BottomNavigationPage({Key? key}) : super(key: key);
 
   @override
   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
@@ -17,16 +17,13 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   //상세 페이지의 마커
   int _currentIndex = 0; // 바텀 네비게이션 현재 index
   List<Widget> appPages = [
-    DisableClassPage(),
-    SelectHealthCarePage(),
+    const DisableClassPage(),
+    const SelectHealthCarePage(),
    // LocationPage(),
-
   ]; // 앱 화면들
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-   // LocationClass().getLocation(context);
   }
   @override
   Widget build(BuildContext context) {
@@ -36,12 +33,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         selectedItemColor: Colors.black, // 선택된 아이템의 라벨 색상
         unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 라벨 색상
         currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            print(_currentIndex);
-          });
-        },
+        onTap: (index) => setState(() => _currentIndex = index),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline,color: Colors.black,),

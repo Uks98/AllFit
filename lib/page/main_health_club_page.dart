@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,50 +6,52 @@ import 'package:health_care_ml_app/base_app_color_and_font/constant_widget.dart'
 import 'package:velocity_x/velocity_x.dart';
 import '../color/color_box.dart';
 import '../model/health_club_data.dart';
+import '../model/locationPlaceListProvider.dart';
 import 'club_detail_page.dart';
-
 
 class MainClubInfoPage extends StatefulWidget {
   const MainClubInfoPage({super.key});
-
   @override
   State<MainClubInfoPage> createState() => _MainClubInfoPageState();
 }
 
-class _MainClubInfoPageState extends State<MainClubInfoPage> {
+class _MainClubInfoPageState extends State<MainClubInfoPage> implements LocationPlaceListProvider {
   List<DisableClubInfo> placeList = [];
   List<DisableClubInfo> filteredPlaceList = [];
   List<DisableClubInfo> finalList = [];
   int locationIndex = 0;
   List<String> locationList = ["전체","서울","경기","경남","대구",];
 
+  @override
   void showAllLocations() {
       filteredPlaceList = placeList; // 전체 리스트를 보여주기 위해 filteredPlaceList를 초기화
   }
-
-  Future<void> getPlaceList() async {
+  @override
+  Future<void> getDisableClass() async {
     final routeFromJsonFile = await rootBundle.loadString(
         'lib/json/KS_DSPSN_LVLH_PHSTRN_CLUBMMB_CLUB_VIEWS_INFO_202304.json');
-     placeList = DisableClub.fromJson(routeFromJsonFile).disableClub ?? <DisableClubInfo>[];
-      filteredPlaceList = placeList;
+    placeList = DisableClub.fromJson(routeFromJsonFile).disableClub ?? <DisableClubInfo>[];
+    filteredPlaceList = placeList;
+    setState(() {});
   }
 
+  @override
   void getLocationPlaceList(String location) {
     if (location == "전체") {
       showAllLocations(); // "전체"를 선택한 경우 전체 리스트를 보여주는 함수 호출
     } else {
       setState(() {
         filteredPlaceList = placeList
-            .where((place) => place.class_location!.contains(location))
+            .where((place) => place.classLocation!.contains(location))
             .toList();
       });
     }
   }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getPlaceList();
+    getDisableClass();
     filteredPlaceList = placeList;
   }
 
@@ -65,7 +65,7 @@ class _MainClubInfoPageState extends State<MainClubInfoPage> {
           children: [
             SizedBox(height: normalHeight,),
             SizedBox(
-              width: 400,
+              width: 700,
               height: 40,
               child: AnimationLimiter(
                 child: ListView.separated(
@@ -98,18 +98,14 @@ class _MainClubInfoPageState extends State<MainClubInfoPage> {
                           ),
                         ),
                       );
-
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5,
-                      );
+                      return WidthBox(normalHeight);
                     },
                     itemCount: locationList.length),
               ),
             ),
-            SizedBox(height: bigHeight,),
-
+          HeightBox(bigHeight),
             Expanded(
               child: AnimationLimiter(
                 child: ListView.separated(
@@ -136,9 +132,9 @@ class _MainClubInfoPageState extends State<MainClubInfoPage> {
                                     );
                                   },
                                   hoverColor: Colors.grey[200],
-                                  contentPadding: EdgeInsets.only(left: 20),
-                                  title: filteredPlaceList[index].club_nm?.text.fontWeight(FontWeight.w500).size(normalFontSize - 1).make(),
-                                  subtitle: Text("${filteredPlaceList[index].class_location} ${filteredPlaceList[index].signgu_nm}",style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
+                                  contentPadding: EdgeInsets.only(left: bigWidth),
+                                  title: filteredPlaceList[index].classNM?.text.fontWeight(FontWeight.w500).size(normalFontSize - 1).make(),
+                                  subtitle: Text("${filteredPlaceList[index].classLocation} ${filteredPlaceList[index].signguNM}",style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
                                 ),
                               ),
                             ),)
@@ -147,9 +143,7 @@ class _MainClubInfoPageState extends State<MainClubInfoPage> {
 
                     },
                     separatorBuilder: (ctx, idx) {
-                      return const SizedBox(
-                        height: 10,
-                      );
+                      return HeightBox(normalHeight);
                     },
                     itemCount: filteredPlaceList.length),
               ),

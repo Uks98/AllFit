@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 const spacer = Spacer();
 
 double smallWidth = 5.0;
-double middleWidth = 10.0;
+double normalWidth = 10.0;
 double bigWidth = 20.0;
 
 double smallHeight = 5.0;

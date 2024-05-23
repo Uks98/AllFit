@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 class CameraView extends StatefulWidget {
-  CameraView(
+  const CameraView(
       {Key? key,
       required this.customPaint,
       required this.onImage,

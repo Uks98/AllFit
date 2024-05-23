@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -7,6 +9,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../base_app_color_and_font/constant_widget.dart';
 import '../color/color_box.dart';
+import '../model/locationPlaceListProvider.dart';
 
 
 class DisableClassPage extends StatefulWidget {
@@ -16,40 +19,42 @@ class DisableClassPage extends StatefulWidget {
   State<DisableClassPage> createState() => _DisableClassPageState();
 }
 
-class _DisableClassPageState extends State<DisableClassPage> with TickerProviderStateMixin{
+class _DisableClassPageState extends State<DisableClassPage> with TickerProviderStateMixin implements LocationPlaceListProvider{
   List<DisableClassInfo> disableClassroom = [];
   List<String> sportList = ["전체","게이트볼","탁구","당구","댄스",];
   List<DisableClassInfo> sportFilterList = [];
   int sportIndex = 0;
+
+  @override
   Future<void> getDisableClass() async {
-    final routeFromJsonFile = await rootBundle.loadString(
-        'lib/json/KS_DSPSN_LVLH_PHSTRN_CLSSRM_DATA_INFO_202304.json');
-    disableClassroom = DisableClass.fromJson(routeFromJsonFile).disableClassList ?? <DisableClassInfo>[];
-    setState(() {});
+    try {
+      final routeFromJsonFile = await rootBundle.loadString('lib/json/KS_DSPSN_LVLH_PHSTRN_CLSSRM_DATA_INFO_202304.json');
+      disableClassroom = DisableClass.fromJson(routeFromJsonFile).disableClassList ?? <DisableClassInfo>[];
+      setState(() {});
+    } catch (e) {
+      disableClassroom = [];
+    }
+
   }
+  @override
   void showAllLocations() {
     sportFilterList = disableClassroom; // 전체 리스트를 보여주기 위해 filteredPlaceList를 초기화
   }
-  void getSportPlaceList(String location) {
+  @override
+  void getLocationPlaceList(String location) {
     if (location == "전체") {
       showAllLocations(); // "전체"를 선택한 경우 전체 리스트를 보여주는 함수 호출
     } else {
       setState(() {
-        sportFilterList = disableClassroom
-            .where((place) => place.class_nm!.contains(location))
-            .toList();
+        sportFilterList = disableClassroom.where((place) => place.classNM!.contains(location)).toList();
       });
-      for(final x in sportFilterList){
-        print(x.class_nm);
-      }
     }
   }
   late TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this); // 탭 수 지정
-    // TODO: implement initState
     super.initState();
+    _tabController = TabController(length: 2, vsync: this); // 탭 수 지정
     getDisableClass();
     sportFilterList =  disableClassroom;
   }
@@ -58,7 +63,7 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
+        preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
           centerTitle: true,
           backgroundColor: ColorBox.appbarColor,
@@ -79,7 +84,7 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
       controller: _tabController,
       children: [
         // 탭 A에 해당하는 페이지
-       MainClubInfoPage(),
+       const MainClubInfoPage(),
         // 탭 B에 해당하는 페이지
       mainClassInfo(),
       ],
@@ -89,54 +94,51 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
 
   Widget mainClassInfo() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0,right: 10),
+      padding:  EdgeInsets.only(left: normalHeight,right: normalHeight),
       child: Column(
         children: [
-          SizedBox(height: normalHeight,),
+         HeightBox(normalHeight),
         SizedBox(
-        width: 400,
-        height: 40,
-        child:
-        AnimationLimiter(
-          child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (ctx, index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 500),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child:  GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            sportIndex = index;
-                            getSportPlaceList(sportList[index]);
-                          });
-                        },
-                        child: Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: sportIndex == index
-                                ? ColorBox.locationButtonColor
-                                : ColorBox.unSelectColor,
-                            borderRadius: BorderRadius.circular(14),
+          width: 500,
+          height: 40,
+          child: AnimationLimiter(
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (ctx, index) {
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 500),
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child:  GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              sportIndex = index;
+                              getLocationPlaceList(sportList[index]); //sportList에 index에 해당하는 텍스트를 인자로 입력합니다.
+                            });
+                          },
+                          child: Container(
+                            width: 80,
+                            decoration: BoxDecoration(
+                              color: sportIndex == index
+                                  ? ColorBox.locationButtonColor
+                                  : ColorBox.unSelectColor,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: Center(child: sportList[index].text.size(smallFontSize).make()),
                           ),
-                          child: Center(child: sportList[index].text.size(smallFontSize).make()),
-                        ),
-                      )
+                        )
+                      ),
                     ),
-                  ),
-                );
-
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  width: 5,
-                );
-              },
-              itemCount: sportList.length),
-        )),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return  WidthBox(normalHeight);
+                },
+                itemCount: sportList.length),
+          ),
+        ),
           SizedBox(height: bigHeight,),
           Expanded(
             child: AnimationLimiter(
@@ -157,9 +159,9 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
                                 borderRadius: BorderRadius.circular(normalHeight),
                                 child: ListTile(
                                   hoverColor: Colors.grey[200],
-                                  contentPadding: EdgeInsets.only(left: 20),
-                                  title: sportFilterList[index].class_nm?.text.fontWeight(FontWeight.w500).size(normalFontSize - 1).make(),
-                                  subtitle: Text("${sportFilterList[index].class_location} " + sportFilterList[index].signgu_nm.toString(),style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
+                                  contentPadding: const EdgeInsets.only(left: 20),
+                                  title: sportFilterList[index].classNM?.text.fontWeight(FontWeight.w500).size(normalFontSize - 1).make(),
+                                  subtitle: Text("${sportFilterList[index].classLocation} ${sportFilterList[index].signguNM}",style: TextStyle(fontSize: smallFontSize + 3,color: Colors.grey[600]),),
                                 ),
                               ),
                             )
@@ -169,9 +171,7 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
 
                   },
                   separatorBuilder: (ctx, idx) {
-                    return SizedBox(
-                      height: 10,
-                    );
+                    return HeightBox(normalHeight);
                   },
                   itemCount: sportFilterList.length),
             ),
@@ -180,4 +180,8 @@ class _DisableClassPageState extends State<DisableClassPage> with TickerProvider
       ),
     );
   }
+
+
+
+
 }

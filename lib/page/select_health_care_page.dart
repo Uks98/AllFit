@@ -33,6 +33,7 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
   String disableTypeText = "";
   String disableGradText = "";
   String sportStepText = "";
+
   Future<void> getSportList() async {
     final routeFromJsonFile = await rootBundle.loadString(
         'lib/json/KS_DSPSN_FTNESS_MESURE_ACCTO_RECOMEND_MVM_INFO_202304.json');
@@ -48,12 +49,8 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
             sport.disalbe_type!.contains(type)&&
             sport.disable_grad!.contains(grad) &&
             sport.sport_step!.contains(step)
-    )
-        .toList();
-    print(filteredSportList);
-    for (final x in filteredSportList) {
-      print("추천 운동        ${x.age}");
-    }
+    ).toList();
+
   }
 
   @override
@@ -69,7 +66,7 @@ class _SelectHealthCarePageState extends State<SelectHealthCarePage> {
       child: Scaffold(
         body: Padding(
           padding:
-              EdgeInsets.only(left: middleWidth, top: 30, right: middleWidth),
+              EdgeInsets.only(left: normalWidth, top: 30, right: normalWidth),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
