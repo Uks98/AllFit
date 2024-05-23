@@ -1,16 +1,5 @@
-# health_care_ml_app
+# 💡 Topic
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **머신러닝 기반 올바른 자세 가이드를 제공하는 장애인 운동 능력 개선 앱**
+- 장애인 체력 측정별 추천 운동 공공데이터와 사용자가 입력한 정보를 토대로 장애인의 현재 장애 가장 적절하고 안전한 운동 종목을 추천
+- 대한장애인체육회의 장애인 생활체육교실 데이터와 동호회 정보를 제공하는 공공데이터를 활용해 현재 운영중인 체육 교실과 동호회 정보를 목록화 시켜 한 눈에 확인 할 수 있도록 설계
